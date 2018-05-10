@@ -69,6 +69,12 @@ $(document).ready(function(){
         moms_data = table.row($(this).closest('tr')).data();
         $("#delete-moms-modal").modal("show");
     });
+
+    $("#feature_name").on("change",function() {
+        if ($(this).val() == "new_feature"){
+            $(this).replaceWith("<input type='text' id='feature_name' class='form-control'>");
+        }
+    });
 });
 
 function getFeatureName(feat_type) {
@@ -86,6 +92,7 @@ function getFeatureName(feat_type) {
        for (var counter = 0; counter < result.length; counter++) {
             $('<option>').val(result[counter].feat_id.toUpperCase()).text(result[counter].name.toUpperCase()).appendTo('#feature_name');
        }
+       $('<option>').val("new_feature").text("New Feature").appendTo('#feature_name');
     });
 }
 
@@ -125,6 +132,7 @@ function submitMoms() {
         let result = data;
         if (result == "1") {
             alert("Successfully added Manifestation!");
+            location.reload();
         } else {
             alert("Failed to add Manifestation!");
         }
