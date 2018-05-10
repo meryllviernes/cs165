@@ -8,6 +8,23 @@ class Moms_model extends CI_Model {
 	}
 
 	public function insertMoms($data) {
+		if (is_numeric($data['feat_id']) == false) {
+			$query = "INSERT INTO features (site_id, feat_type_id, name) VALUES ('".$data['site_id']."', '".$data['feat_type_id']."', '".$data['feat_id']."')";
+			$last_id_raw = $this->db->query($query);
+			
+			$query = "SELECT LAST_INSERT_ID() as feat_id;";
+			$mo = $this->db->query($query);
+			$raw = $mo->result();
+			$data['feat_id'] = $raw[0]->feat_id;
+
+			if (sizeOf($this->checkIfMomsExists($data)) != 0) {
+				$query = "INSERT INTO moms (feat_id, ts_observation, report, observer, reporter) VALUES ('".$data['feat_id']."', '".$data['observance_timestamp']."','".$data['narrative']."','".$data['observer']."', '".$data['user_id']."')";
+				$result = $this->db->query($query);
+				return $result;
+			} else {
+				return false;
+			}
+		}
 		if (sizeOf($this->checkIfMomsExists($data)) != 0) {
 			$query = "INSERT INTO moms (feat_id, ts_observation, report, observer, reporter) VALUES ('".$data['feat_id']."', '".$data['observance_timestamp']."','".$data['narrative']."','".$data['observer']."', '".$data['user_id']."')";
 			$result = $this->db->query($query);
